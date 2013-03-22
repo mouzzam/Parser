@@ -25,9 +25,14 @@ public class HTMLParser {
 	public static String FrequentWords, Links;
 	/** A function to display the document title, needs Document object as an argument*/
 	public void ShowTitle(Document doc){
+		try{
 		String title = doc.title();
 		String text = doc.body().text();
 		System.out.println("title : " + title);
+		}catch(Exception e)
+		{
+			System.out.println("No title found");
+		}
 //		System.out.println("body : " + doc.body());
 	}
 	/** A function to display the meta, needs Document object as an argument*/
@@ -40,7 +45,7 @@ public class HTMLParser {
 		String keywords = doc.select("meta[name=keywords]").first().attr("content");
 		System.out.println("Meta keyword : " + keywords);
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println("No Keywords found");
 		}
 	}
 	
@@ -129,17 +134,23 @@ public class HTMLParser {
 	}
 
 	public static void main(String[] args) throws IOException {
-		Validate.isTrue(args.length == 1, "usage: supply url to fetch");
-		String url = args[0];
+//		Validate.isTrue(args.length == 1, "usage: supply url to fetch");
+//		String url = args[0];
 		//        System.out.print("Fetching"+url+" ...");
 		HTMLParser getLinks= new HTMLParser();
-		File input = new File("input.html");
-		Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
-//		Document doc = Jsoup.connect("http://en.wikipedia.org/wiki/Monte_Carlo_algorithm").get();
+//		File input = new File("input.html");
+//		Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
+		Document doc = Jsoup.connect("http://en.wikipedia.org/wiki/Monte_Carlo_algorithm").get();
+		try{
+//		Document doc = Jsoup.parse(args[0]);
 		getLinks.ShowTitle(doc);
 		getLinks.GetMeta(doc);
 		getLinks.FetchLinks(doc);
 		getLinks.GetContent(doc);
+		}catch(Exception e)
+		{
+			System.out.print("Please give a string as argument ");
+		}
 
 	}
 }
